@@ -163,8 +163,9 @@ def backpropagation(derivative_filters_next_layer, current_layer_input, current_
   rotate(current_filter, 3, 3, rotated_kernel)
   
   # Uses the convolution operation to calculate the derivatives, one without padding for the derivative of the current layer and once padded for the derivative of the current input layer.
-  derivative_filters_current_layer = signal.correlate2d(current_layer_input, derivative_filters_next_layer, "valid")
-  derivative_current_layer_input = signal.convolve2d(derivative_filters_next_layer, rotated_kernel, "full")
+  # For training the functions singal.correlate2d and signal.convolve2d were used as they do the exact same operation but more efficiently. It may be there these exist somehwere in the code   
+  derivative_filters_current_layer = Convolution(current_layer_input, derivative_filters_next_layer, "valid")
+  derivative_current_layer_input = Convolution(derivative_filters_next_layer, rotated_kernel, "padded")
 
   return derivative_filters_current_layer, derivative_current_layer_input
 
